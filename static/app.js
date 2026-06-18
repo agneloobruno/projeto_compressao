@@ -1,6 +1,33 @@
 // app.js — lógica do comparador de compressão
 // Autor: Bruno
 
+// ─── tema claro / escuro ──────────────────────────────────────────────────────
+(function () {
+  // aplica tema salvo antes de renderizar qualquer coisa — evita flash
+  const salvo = localStorage.getItem('tema') || 'dark';
+  document.documentElement.setAttribute('data-theme', salvo);
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btnTema = document.getElementById('theme-toggle');
+  const iconTema = document.getElementById('theme-icon');
+
+  function sincronizarIcone() {
+    const atual = document.documentElement.getAttribute('data-theme');
+    iconTema.textContent = atual === 'dark' ? '☀️' : '🌙';
+  }
+
+  sincronizarIcone();
+
+  btnTema.addEventListener('click', () => {
+    const atual = document.documentElement.getAttribute('data-theme');
+    const novo  = atual === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', novo);
+    localStorage.setItem('tema', novo);
+    sincronizarIcone();
+  });
+});
+
 // ─── estado ──────────────────────────────────────────────────────────────────
 let arquivoAtual = null;
 let tamanhoOriginalKb = 0;

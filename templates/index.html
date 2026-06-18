@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,12 @@
         <h1>Comparador de Compressão de Imagens</h1>
         <p class="header-tagline">Faça upload de uma foto e veja instantaneamente como cada formato afeta a qualidade e o tamanho do arquivo</p>
       </div>
-      <span class="header-badge">Sistemas Multimídia</span>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+        <span class="header-badge">Sistemas Multimídia</span>
+        <button class="theme-toggle" id="theme-toggle" title="Alternar entre modo claro e escuro" aria-label="Alternar tema">
+          <span id="theme-icon">☀️</span>
+        </button>
+      </div>
     </div>
   </header>
 
