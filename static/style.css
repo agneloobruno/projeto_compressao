@@ -38,11 +38,11 @@
   --font-ui:   'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
 
-  /* espaçamentos e raios */
-  --r-sm:  4px;
-  --r-md:  9px;
-  --r-lg:  16px;
-  --r-xl:  24px;
+  /* espaçamentos e raios — mais angulares, menos "template" */
+  --r-sm:  2px;
+  --r-md:  4px;
+  --r-lg:  6px;
+  --r-xl:  6px;
   --r-full: 9999px;
 }
 
@@ -597,40 +597,38 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
   box-shadow: 0 8px 30px rgba(0,0,0,.25);
 }
 
-/* faixa lateral colorida — indica o formato visualmente */
-.resultado-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--fmt-color, #444);
-  border-radius: var(--r-lg) 0 0 var(--r-lg);
-}
+/* sem faixa lateral absoluta — a borda agora fica no card-topo via border-left */
 
-/* badge de destaque ("melhor qualidade", etc) */
+/* badge de destaque — faz parte do fluxo, não flutua sobre outros elementos */
 .winner-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: .4px;
-  padding: 3px 8px;
-  border-radius: var(--r-full);
-  background: rgba(77,184,135,.15);
+  letter-spacing: .3px;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  background: rgba(77,184,135,.12);
   color: var(--green);
-  border: 1px solid rgba(77,184,135,.25);
-  display: none;
+  border: 1px solid rgba(77,184,135,.2);
+  white-space: nowrap;
 }
-
-.resultado-card.tem-destaque .winner-badge { display: block; }
 
 .card-topo {
   display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px 10px 14px;
+  border-left: 3px solid var(--fmt-color, #444);
+}
+
+.card-topo-linha {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 13px 14px 10px 16px;
+  gap: 8px;
+}
+
+.card-topo-sub {
+  min-height: 18px; /* espaço reservado mesmo sem badge — evita layout shift */
 }
 
 .fmt-nome {

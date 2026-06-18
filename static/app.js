@@ -230,20 +230,21 @@ function criarCard(fmt, r, destaque) {
   const qualClass = 'qb-' + qualRaw.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
   const card = document.createElement('div');
-  card.className = `resultado-card${destaque ? ' tem-destaque' : ''}`;
+  card.className = 'resultado-card';
   card.style.setProperty('--fmt-color', fmt.cor);
 
   card.innerHTML = `
-    ${destaque ? `<div class="winner-badge">${destaque}</div>` : ''}
-
     <div class="card-topo">
-      <div class="fmt-nome">
-        <div class="fmt-dot" style="background:${fmt.cor}"></div>
-        ${fmt.nome}
-      </div>
-      <div style="text-align:right">
+      <div class="card-topo-linha">
+        <div class="fmt-nome">
+          <div class="fmt-dot" style="background:${fmt.cor}"></div>
+          ${fmt.nome}
+        </div>
         <div class="card-tamanho">${r.tamanho_kb.toFixed(1)} KB</div>
-        <div class="card-reducao">${reducaoStr}</div>
+      </div>
+      <div class="card-topo-linha card-topo-sub">
+        <span class="card-reducao">${reducaoStr}</span>
+        ${destaque ? `<span class="winner-badge">${destaque}</span>` : ''}
       </div>
     </div>
 
