@@ -972,6 +972,160 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
   color: var(--t3);
 }
 
+/* ── Space Grotesk nos títulos ───────────────────────────────────────────── */
+.header-brand h1,
+.section-header h2 {
+  font-family: 'Space Grotesk', var(--font-ui);
+}
+
+.header-brand h1 { font-size: 20px; letter-spacing: -.5px; }
+.section-header h2 { font-size: 14px; letter-spacing: -.2px; font-weight: 700; }
+
+/* ── animação de entrada dos cards ───────────────────────────────────────── */
+@keyframes cardEntra {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cards-grid .resultado-card {
+  animation: cardEntra .38s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+.cards-grid .resultado-card:nth-child(1) { animation-delay:   0ms; }
+.cards-grid .resultado-card:nth-child(2) { animation-delay:  80ms; }
+.cards-grid .resultado-card:nth-child(3) { animation-delay: 160ms; }
+
+/* desliga animação quando já renderizado (re-comparação) */
+.cards-grid.loading .resultado-card { animation: none; }
+
+/* ── Chart.js containers ─────────────────────────────────────────────────── */
+.chart-container {
+  position: relative;
+  height: 300px;
+}
+
+/* ── seletor de formato do slider ────────────────────────────────────────── */
+.fmt-selector {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.fmt-sel-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--t3);
+  background: var(--bg-2);
+  border: 1px solid var(--b1);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: color .15s, border-color .15s, background .15s;
+}
+
+.fmt-sel-btn:hover { color: var(--t1); border-color: var(--b2); }
+
+.fmt-sel-btn.ativo {
+  color: var(--t1);
+  border-color: var(--b2);
+  background: var(--bg-3);
+}
+
+.fmt-sel-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── before/after image slider ───────────────────────────────────────────── */
+.ia-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--b2);
+  background: var(--bg-3);
+  cursor: ew-resize;
+  user-select: none;
+  max-height: 480px;
+  line-height: 0; /* remove gap below inline img */
+}
+
+/* imagem de trás (comprimida) — ocupa o espaço todo */
+.ia-after {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* camada da frente — original, clipped pelo JS */
+.ia-before-clip {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 50% 0 0);
+  overflow: hidden;
+}
+
+.ia-before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* linha divisória */
+.ia-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255,255,255,.85);
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(0,0,0,.4);
+}
+
+/* alça arrastável */
+.ia-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 14px rgba(0,0,0,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+/* labels flutuantes */
+.ia-label {
+  position: absolute;
+  top: 12px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  background: rgba(0,0,0,.5);
+  color: #fff;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+.ia-label-l { left: 12px; }
+.ia-label-r { right: 12px; }
+
+/* light mode */
+[data-theme="light"] .fmt-sel-btn { background: #fff; }
+[data-theme="light"] .fmt-sel-btn.ativo { background: var(--bg-2); }
+
 /* ── responsivo ──────────────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .cards-grid { grid-template-columns: repeat(2, 1fr); }

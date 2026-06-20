@@ -16,7 +16,6 @@ from datetime import datetime
 from flask import Flask, jsonify, render_template, request, send_file
 
 import compressor as comp
-import graficos
 import metricas as met
 from PIL import Image
 
@@ -61,10 +60,15 @@ def comparar():
     except ValueError:
         return jsonify({"sucesso": False, "erro": "Parâmetros inválidos."}), 400
 
+    # lê o stream completo antes de tudo — necessário para medir o tamanho real
+    # e depois passar para o Pillow sem consumir o stream duas vezes
+    raw_bytes = arquivo.read()
+    tamanho_original_kb = round(len(raw_bytes) / 1024, 2)
+
     # abre a imagem direto do buffer — sem salvar em disco
     try:
-        imagem = Image.open(arquivo.stream)
-        imagem.load()  # força a leitura antes do stream fechar
+        imagem = Image.open(io.BytesIO(raw_bytes))
+        imagem.load()
     except Exception as e:
         return jsonify({"sucesso": False, "erro": f"Não foi possível abrir a imagem: {e}"}), 400
 
@@ -113,25 +117,11 @@ def comparar():
             "imagem_base64": imagem_b64,
         }
 
-    # gera gráficos como base64
-    try:
-        graficos_json = {
-            "tamanho":   graficos.grafico_tamanho(lista_metricas),
-            "qualidade": graficos.grafico_qualidade(lista_metricas),
-            "tempo":     graficos.grafico_tempo(lista_metricas),
-            "painel":    graficos.painel_completo(lista_metricas),
-        }
-    except Exception as e:
-        # gráfico com erro não derruba tudo — só avisa
-        graficos_json = {"erro": f"Erro ao gerar gráficos: {e}"}
-
     # informações da imagem original
     w, h = original_rgb.size
-    tamanho_original_kb = round(arquivo.tell() / 1024, 2) if hasattr(arquivo, "tell") else 0
-    # fallback: calcula a partir do BMP (referência sem compressão)
-    if tamanho_original_kb == 0:
-        tamanho_original_kb = round(compressor._bytes_originais / 1024, 2)
 
+    # gráficos agora são renderizados pelo Chart.js no frontend
+    # a API só retorna as métricas brutas — mais leve e mais rápido
     resposta = {
         "sucesso": True,
         "original": {
@@ -141,7 +131,6 @@ def comparar():
             "tamanho_kb": tamanho_original_kb,
         },
         "resultados": resultado_json,
-        "graficos": graficos_json,
     }
 
     # guarda pra /api/exportar usar depois

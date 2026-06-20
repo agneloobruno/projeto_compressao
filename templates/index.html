@@ -6,7 +6,7 @@
   <title>Comparador de Compressão de Imagens</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -16,12 +16,12 @@
   <header>
     <div class="header-inner">
       <div class="header-brand">
-        <h1>Comparador de Compressão de Imagens</h1>
-        <p class="header-tagline">Faça upload de uma foto e veja instantaneamente como cada formato afeta a qualidade e o tamanho do arquivo</p>
+        <h1>Comparador de Compressão</h1>
+        <p class="header-tagline">Compare JPEG, PNG e WebP — qualidade, tamanho e velocidade, lado a lado</p>
       </div>
       <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
         <span class="header-badge">Sistemas Multimídia</span>
-        <button class="theme-toggle" id="theme-toggle" title="Alternar entre modo claro e escuro" aria-label="Alternar tema">
+        <button class="theme-toggle" id="theme-toggle" title="Alternar tema" aria-label="Alternar tema">
           <span id="theme-icon">☀️</span>
         </button>
       </div>
@@ -34,7 +34,7 @@
     <aside class="sidebar">
       <div class="sidebar-inner">
 
-        <!-- fluxo de uso — o que fazer em cada etapa -->
+        <!-- fluxo de passos -->
         <div class="fluxo" id="fluxo">
           <div class="fluxo-passo ativo" id="passo-1">
             <div class="passo-num">1</div>
@@ -69,40 +69,37 @@
             <div class="drop-content" id="drop-content">
               <div class="drop-icon">📁</div>
               <p class="drop-title">Arraste sua imagem aqui</p>
-              <p class="drop-sub">ou clique para abrir o explorador de arquivos</p>
+              <p class="drop-sub">ou clique para abrir o explorador</p>
               <p class="drop-formats">JPG · PNG · WebP · BMP · TIFF</p>
             </div>
             <div id="preview-container">
-              <img id="preview-img" alt="Preview da imagem">
+              <img id="preview-img" alt="Preview">
               <span id="preview-info"></span>
               <span class="preview-trocar" id="preview-trocar">Trocar imagem</span>
             </div>
           </div>
         </div>
 
-        <!-- parâmetros de compressão -->
+        <!-- parâmetros -->
         <div>
           <p class="section-title">Configurações de compressão</p>
           <div class="param-group">
-
             <div class="param-item">
               <div class="param-header">
                 <span class="param-name">Nível de qualidade</span>
                 <span class="param-val" id="val-qualidade">85</span>
               </div>
-              <p class="param-hint">Afeta JPEG e WebP — quanto menor, menor o arquivo (e mais defeitos)</p>
+              <p class="param-hint">Afeta JPEG e WebP — quanto menor, menor o arquivo</p>
               <input type="range" id="slider-qualidade" min="1" max="95" value="85">
             </div>
-
             <div class="param-item">
               <div class="param-header">
                 <span class="param-name">Compressão PNG</span>
                 <span class="param-val" id="val-png">6</span>
               </div>
-              <p class="param-hint">PNG não perde qualidade — esse número afeta só a velocidade</p>
+              <p class="param-hint">PNG não perde qualidade — afeta só a velocidade</p>
               <input type="range" id="slider-png" min="0" max="9" value="6">
             </div>
-
             <div class="param-item">
               <label class="check-label">
                 <input type="checkbox" id="check-lossless">
@@ -110,12 +107,11 @@
                 <span class="check-hint">lossless</span>
               </label>
             </div>
-
           </div>
         </div>
 
-        <!-- ação principal + status -->
-        <div style="display:flex;flex-direction:column;gap:10px;">
+        <!-- ação + status -->
+        <div style="display:flex;flex-direction:column;gap:10px">
           <button class="btn-primary" id="btn-comparar" disabled>
             ▶ Comparar os três formatos
           </button>
@@ -129,16 +125,14 @@
       </div>
     </aside>
 
-    <!-- ── área de resultados ─────────────────────────────────────────────── -->
+    <!-- ── área principal ─────────────────────────────────────────────────── -->
     <main class="main-area">
 
-      <!-- estado vazio -->
+      <!-- placeholder -->
       <div class="placeholder" id="placeholder">
         <div class="ph-visual">🖼️</div>
         <p class="ph-title">Nenhuma imagem carregada ainda</p>
-        <p class="ph-sub">
-          Faça upload de qualquer foto no painel ao lado. O sistema vai comprimí-la automaticamente em três formatos e mostrar qual mantém a melhor qualidade com o menor tamanho.
-        </p>
+        <p class="ph-sub">Faça upload de qualquer foto. O sistema vai comprimí-la nos três formatos e mostrar qual mantém a melhor qualidade com o menor tamanho.</p>
         <div class="ph-formats">
           <span class="ph-fmt" style="background:rgba(232,89,60,.12);color:#e8593c">JPEG</span>
           <span class="ph-fmt" style="background:rgba(59,139,212,.12);color:#3b8bd4">PNG</span>
@@ -146,68 +140,112 @@
         </div>
       </div>
 
-      <!-- cards de resultado -->
+      <!-- ── 1. cards de resultado ─────────────────────────────────────── -->
       <section id="cards-section" style="display:none">
         <div class="section-header">
           <h2>Resultados por formato</h2>
-          <p>Clique na imagem para ver em tamanho real</p>
+          <p>Clique na imagem para abrir em tamanho real</p>
         </div>
         <div class="cards-grid" id="cards-grid"></div>
       </section>
 
-      <!-- análise comparativa com gráficos -->
-      <section class="graficos-section" id="graficos-section" style="display:none">
+      <!-- ── 2. comparação visual (slider before/after) ─────────────────── -->
+      <section id="comparacao-section" style="display:none">
         <div class="section-header">
-          <h2>Análise comparativa</h2>
-          <p>Gerado a partir dos dados de compressão da sua imagem</p>
+          <h2>Comparação visual</h2>
+          <p>Arraste o divisor para comparar o original com o formato comprimido</p>
         </div>
 
-        <div class="tabs">
-          <button class="tab-btn ativo" data-tab="painel">Visão Geral</button>
-          <button class="tab-btn" data-tab="tamanho">Tamanho do arquivo</button>
-          <button class="tab-btn" data-tab="qualidade">Qualidade visual</button>
+        <!-- selector de formato -->
+        <div class="fmt-selector" id="fmt-selector">
+          <button class="fmt-sel-btn ativo" data-fmt="jpeg">
+            <span class="fmt-sel-dot" style="background:#e8593c"></span> JPEG
+          </button>
+          <button class="fmt-sel-btn" data-fmt="png">
+            <span class="fmt-sel-dot" style="background:#3b8bd4"></span> PNG
+          </button>
+          <button class="fmt-sel-btn" data-fmt="webp">
+            <span class="fmt-sel-dot" style="background:#e9a227"></span> WebP
+          </button>
+        </div>
+
+        <!-- slider de imagens -->
+        <div class="ia-wrapper" id="ia-wrapper">
+          <!-- imagem comprimida (fundo) -->
+          <img class="ia-img ia-after" id="ia-after" src="" alt="Imagem comprimida">
+          <!-- imagem original (frente, clipada pelo slider) -->
+          <div class="ia-before-clip" id="ia-before-clip">
+            <img class="ia-img ia-before" id="ia-before" src="" alt="Imagem original">
+          </div>
+          <!-- divisor -->
+          <div class="ia-divider" id="ia-divider">
+            <div class="ia-handle">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M6 4L2 9L6 14M12 4L16 9L12 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <!-- labels -->
+          <span class="ia-label ia-label-l">Original</span>
+          <span class="ia-label ia-label-r" id="ia-label-r">JPEG</span>
+        </div>
+      </section>
+
+      <!-- ── 3. gráficos Chart.js ──────────────────────────────────────── -->
+      <section id="graficos-section" style="display:none">
+        <div class="section-header">
+          <h2>Análise comparativa</h2>
+          <p>Passe o mouse sobre as barras para ver os valores</p>
+        </div>
+
+        <div class="tabs" id="chart-tabs">
+          <button class="tab-btn ativo" data-tab="radar">Visão Geral</button>
+          <button class="tab-btn" data-tab="tamanho">Tamanho</button>
+          <button class="tab-btn" data-tab="qualidade">Qualidade</button>
           <button class="tab-btn" data-tab="tempo">Velocidade</button>
         </div>
 
-        <div id="tab-painel" class="tab-panel ativo">
-          <img id="grafico-painel" class="grafico-img" alt="Painel com todos os gráficos comparativos">
+        <div id="tab-radar" class="tab-panel ativo">
+          <div class="chart-container">
+            <canvas id="chart-radar"></canvas>
+          </div>
         </div>
         <div id="tab-tamanho" class="tab-panel">
-          <img id="grafico-tamanho" class="grafico-img" alt="Comparação de tamanho de arquivo em KB">
+          <div class="chart-container">
+            <canvas id="chart-tamanho"></canvas>
+          </div>
         </div>
         <div id="tab-qualidade" class="tab-panel">
-          <img id="grafico-qualidade" class="grafico-img" alt="Comparação de métricas de qualidade visual">
+          <div class="chart-container">
+            <canvas id="chart-qualidade"></canvas>
+          </div>
         </div>
         <div id="tab-tempo" class="tab-panel">
-          <img id="grafico-tempo" class="grafico-img" alt="Comparação de velocidade de compressão">
+          <div class="chart-container">
+            <canvas id="chart-tempo"></canvas>
+          </div>
         </div>
 
         <div class="legenda-graficos">
-          <div class="leg-item">
-            <div class="leg-dot" style="background:#e8593c"></div>
-            JPEG
-          </div>
-          <div class="leg-item">
-            <div class="leg-dot" style="background:#3b8bd4"></div>
-            PNG
-          </div>
-          <div class="leg-item">
-            <div class="leg-dot" style="background:#e9a227"></div>
-            WebP
-          </div>
+          <div class="leg-item"><div class="leg-dot" style="background:#e8593c"></div>JPEG</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#3b8bd4"></div>PNG</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#e9a227"></div>WebP</div>
         </div>
       </section>
 
       <!-- exportar -->
       <div class="export-row" id="export-row" style="display:none">
         <button class="btn-secondary" id="btn-exportar" disabled>
-          ↓ Baixar resultados (.zip com CSV, JSON e imagens)
+          ↓ Baixar resultados (.zip)
         </button>
       </div>
 
     </main>
   </div>
 </div>
+
+<!-- Chart.js via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="/static/app.js"></script>
 </body>
 </html>
